@@ -10,17 +10,20 @@ import java.util.Objects;
 
 public class Pawn implements Drawable {
 
-    private Canvas canvas;
+    private final Canvas canvas;
+
+    private final Image image;
 
     private boolean team;
     private int x;
     private int y;
 
     private final double tileWidth;
-
     private final double tileHeight;
-    public Pawn(int x, int y, Canvas canvas) {
+
+    public Pawn(int x, int y, Canvas canvas, Image image) {
         this.canvas = canvas;
+        this.image = image;
         this.x = x;
         this.y = y;
 
@@ -33,11 +36,12 @@ public class Pawn implements Drawable {
     public void draw() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("PawnWhite.png")));
-
-        gc.drawImage(image,0,0,tileWidth,tileHeight);
-
-
+        gc.drawImage(this.image,x * tileWidth,y * tileHeight ,tileWidth,tileHeight);
     }
+
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
 }

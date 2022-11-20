@@ -24,10 +24,8 @@ public class App extends Application {
 
 				Parent root = loader.load();
 
-				MainMenuController contoller = loader.getController();
-				contoller.setStage(primaryStage);
-
-
+				MainMenuController controller = loader.getController();
+				controller.setStage(primaryStage);
 
 					
 	    		Scene scene = new Scene(root);

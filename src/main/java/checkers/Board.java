@@ -13,8 +13,7 @@ public class Board implements Drawable {
 
     private final double tileWidth;
     private final double tileHeight;
-
-    private Canvas canvas;
+    private final Canvas canvas;
 
     public Board(Canvas canvas) {
         tileWidth  = canvas.getWidth()  / 8;
@@ -39,15 +38,22 @@ public class Board implements Drawable {
                     gc.fillRect(tileWidth * j , tileHeight * i, tileWidth, tileHeight);
                 }
             }
-
         }
 
         gc.restore();
     }
 
+    /**
+     * Highlights specified tile with light blue color
+     * @param x Colum of a tile to be highlighted (0-7)
+     * @param y Row of a tile to be highlighted   (0-7)
+     */
     public void highlight(int x, int y) {
+
+        //TODO - Decide if the input should be checked;
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.save();
+
         gc.setFill(Color.rgb(70,70,200,0.6));
         gc.fillRect(tileWidth * x, tileHeight * y,tileWidth,tileHeight);
 

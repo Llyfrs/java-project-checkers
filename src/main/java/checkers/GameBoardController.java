@@ -2,26 +2,23 @@ package checkers;
 
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+
+import java.util.Objects;
 
 public class GameBoardController {
     @FXML
     private Canvas canvas;
 
-    Board board;
+    //TODO Connect NewGame button
+    //TODO Connect Main Menu button
 
     @FXML
     private void initialize() {
-        board = new Board(canvas);
-        board.draw();
+        Game game = new Game(canvas);
 
-        board.highlight(2,2);
-        board.highlight(2,7);
-        board.highlight(7,3);
-
-        Pawn pawn = new Pawn(0,0,canvas);
-
-        pawn.draw();
+        game.draw();
     }
 
     @FXML
@@ -29,8 +26,5 @@ public class GameBoardController {
         System.out.print(Math.floor(mouseEvent.getX() / (canvas.getWidth()  /8)));
         System.out.print(Math.floor(mouseEvent.getY() / (canvas.getHeight() /8)));
 
-        board.highlight((int) Math.floor(mouseEvent.getX() / (canvas.getWidth()  /8)), (int)Math.floor(mouseEvent.getY() / (canvas.getHeight()  /8)));
-
-        System.out.print("\r\n");
     }
 }
