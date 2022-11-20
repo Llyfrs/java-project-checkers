@@ -6,17 +6,26 @@ import javafx.scene.image.Image;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 public class Pawn implements Drawable {
 
-    Canvas canvas;
-    int x;
-    int y;
+    private Canvas canvas;
 
+    private boolean team;
+    private int x;
+    private int y;
+
+    private final double tileWidth;
+
+    private final double tileHeight;
     public Pawn(int x, int y, Canvas canvas) {
         this.canvas = canvas;
         this.x = x;
         this.y = y;
+
+        this.tileHeight = canvas.getHeight() / 8;
+        this.tileWidth  = canvas.getWidth()  / 8;
 
     }
 
@@ -25,9 +34,9 @@ public class Pawn implements Drawable {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
 
-        Image image = new Image(getClass().getResourceAsStream("PawnWhite.png"));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("PawnWhite.png")));
 
-        gc.drawImage(image,0,0,60,60);
+        gc.drawImage(image,0,0,tileWidth,tileHeight);
 
 
     }

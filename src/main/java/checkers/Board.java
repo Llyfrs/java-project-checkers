@@ -14,7 +14,7 @@ public class Board implements Drawable {
     private final double tileWidth;
     private final double tileHeight;
 
-    Canvas canvas;
+    private Canvas canvas;
 
     public Board(Canvas canvas) {
         tileWidth  = canvas.getWidth()  / 8;
