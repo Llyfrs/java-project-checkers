@@ -42,7 +42,7 @@
          <children>
             <Canvas fx:id="canvas" height="504.0" layoutX="109.0" layoutY="25.0" onMousePressed="#onMouseClicked" width="504.0" />
             <Button layoutX="482.0" layoutY="545.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="91.0" text="New Game" />
-            <Button layoutX="583.0" layoutY="545.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="91.0" text="Main Menu" />
+            <Button layoutX="582.0" layoutY="545.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="91.0" text="Main Menu" />
          </children>
     </AnchorPane>
   </children>

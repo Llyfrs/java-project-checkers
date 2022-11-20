@@ -3,10 +3,8 @@ package checkers;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Objects;
 
 public class Pawn implements Drawable {
 
@@ -15,6 +13,7 @@ public class Pawn implements Drawable {
     private final Image image;
 
     private boolean team;
+    private boolean focused;
     private int x;
     private int y;
 
@@ -37,6 +36,13 @@ public class Pawn implements Drawable {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.drawImage(this.image,x * tileWidth,y * tileHeight ,tileWidth,tileHeight);
+
+        if(focused) {
+            gc.save();
+            gc.setFill(Color.rgb(255,0,0,0.3));
+            gc.fillOval(x*tileWidth, y * tileHeight, tileWidth, tileHeight);
+            gc.restore();
+        }
     }
 
     public void setPosition(int x, int y) {
@@ -44,4 +50,14 @@ public class Pawn implements Drawable {
         this.y = y;
     }
 
+    public boolean isAtPosition(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+
+    public void setFocused(boolean focused) {
+        this.focused = focused;
+    }
+    public boolean isFocused() {
+        return focused;
+    }
 }
