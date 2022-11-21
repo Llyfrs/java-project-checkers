@@ -1,5 +1,6 @@
 package checkers;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 
@@ -15,8 +16,11 @@ import java.util.Objects;
  */
 public class Game {
     private List<Drawable> drawable;
+    private List<Point2D>  highlightedTiles;
     private Board board;
     private Pawn[] pawns;
+
+
 
     private Pawn focusedPawn;
 
@@ -29,8 +33,9 @@ public class Game {
     public Game(Canvas canvas) {
         board = new Board(canvas);
         drawable = new ArrayList<Drawable>();
+        highlightedTiles = new ArrayList<Point2D>();
 
-        // White starts
+        // White starts (gets to play the first round)
         this.round = true;
 
         // Board must be first in the list to be rendered behind pawns
@@ -66,27 +71,26 @@ public class Game {
 
     }
 
+    /**
+     * Performs click on the game board and reacts accordingly
+     * @param x Colum of tile that is to be clicked on
+     * @param y Row of tile that is to be clicked on
+     */
     public void click(int x, int y) {
 
-        Pawn pawn = findPawn(x,y);
+        Pawn pawn = getPawn(x,y);
 
-        if(pawn == null) return; // do nothing if paw not found
-        // If player clicks on the same pawn switch focus state and exit.
-        if(pawn == focusedPawn) {
-            pawn.setFocused(!pawn.isFocused());
+        if(pawn != null) {
+            switchFocus(pawn);
         }
-        else {
-            // Else set old focus pawn back
-            focusedPawn.setFocused(false);
-            pawn.setFocused(true);
-            focusedPawn = pawn;
-        }
+
+
 
         draw();
     }
 
     /**
-     * Draws the board and pawns
+     * Draws all drawable objects
      */
     public void draw() {
         for(Drawable obj : drawable) {
@@ -94,14 +98,36 @@ public class Game {
         }
     }
 
-
-    private Pawn findPawn(int x , int y) {
+    /**
+     *  Gets pawn at specified position
+     * @param x X position
+     * @param y Y position
+     * @return Returns pawn on that position or null if no pawn is found
+     */
+    private Pawn getPawn(int x , int y) {
         for(Pawn pawn : pawns) {
             if(pawn.isAtPosition(x,y)) {
                 return pawn;
             }
         }
 
-        return null;
+        return null; // Returns null if no pawn is found indicating the tile is empty.
+    }
+
+    /**
+     *
+     * @param pawn Pawn that we want to switch focus to.
+     */
+    private void switchFocus(Pawn pawn) {
+        // If player clicks on the same pawn switch focus state
+        if(pawn == focusedPawn) {
+            pawn.setFocused(!pawn.isFocused());
+        }
+        else {
+            // Else set pawn tha was previously focused to un-focused and switch it for the new pawn that is to be focused.
+            focusedPawn.setFocused(false);
+            pawn.setFocused(true);
+            focusedPawn = pawn;
+        }
     }
 }
