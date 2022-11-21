@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 public class Game {
     private List<Drawable> drawable;
-    private List<Point2D>  highlightedTiles;
+    private List<Point2D> legalMoves;
     private Board board;
     private Pawn[] pawns;
 
@@ -33,7 +33,15 @@ public class Game {
     public Game(Canvas canvas) {
         board = new Board(canvas);
         drawable = new ArrayList<Drawable>();
-        highlightedTiles = new ArrayList<Point2D>();
+        legalMoves = new ArrayList<Point2D>();
+
+        legalMoves.add(new Point2D(1,4));
+        legalMoves.add(new Point2D(3,4));
+        legalMoves.add(new Point2D(5,4));
+        legalMoves.add(new Point2D(7,4));
+
+
+
 
         // White starts (gets to play the first round)
         this.round = true;
@@ -95,6 +103,10 @@ public class Game {
     public void draw() {
         for(Drawable obj : drawable) {
             obj.draw();
+        }
+
+        for(Point2D cord : legalMoves) {
+            board.highlight((int)cord.getX(),(int)cord.getY());
         }
     }
 
