@@ -3,5 +3,4 @@ module java-project-checkers {
 	  requires javafx.fxml;
 		opens checkers to javafx.fxml;
 		exports checkers;
-		
 }

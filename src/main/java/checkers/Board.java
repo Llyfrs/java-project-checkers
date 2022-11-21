@@ -58,6 +58,5 @@ public class Board implements Drawable {
         gc.fillRect(tileWidth * x, tileHeight * y,tileWidth,tileHeight);
 
         gc.restore();
-
     }
 }
