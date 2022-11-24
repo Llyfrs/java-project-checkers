@@ -35,13 +35,6 @@ public class Game {
         drawable = new ArrayList<Drawable>();
         legalMoves = new ArrayList<Point2D>();
 
-        legalMoves.add(new Point2D(1,4));
-        legalMoves.add(new Point2D(3,4));
-        legalMoves.add(new Point2D(5,4));
-        legalMoves.add(new Point2D(7,4));
-
-
-
 
         // White starts (gets to play the first round)
         this.round = true;
@@ -88,13 +81,24 @@ public class Game {
 
         Pawn pawn = getPawn(x,y);
 
-        if(pawn != null) {
+        //Puts clicked pawn in to focus mode and generates legal moves for it.
+        if(pawn != null && pawn.isTeam() == round) {
             switchFocus(pawn);
+            legalMoves.clear();
+            legalMoves.addAll(getLegalMoves(focusedPawn));
         }
 
-
+        // If clicked on one of the available legal moves, the focus pawn in moved on chosen tile.
+        if(legalMoves.contains(new Point2D(x,y))) {
+            System.out.print("Legal Move Chosen");
+            focusedPawn.setPosition(new Point2D(x,y));
+            focusedPawn.setFocused(false);
+            legalMoves.clear();
+            round = !round;
+        };
 
         draw();
+
     }
 
     /**
@@ -108,6 +112,42 @@ public class Game {
         for(Point2D cord : legalMoves) {
             board.highlight((int)cord.getX(),(int)cord.getY());
         }
+    }
+
+    private List<Point2D> getLegalMoves(int tileX, int tileY) {
+
+        List<Point2D> pawnLegalMoves = new ArrayList<Point2D>();
+
+        int[] testX = {-1,1};
+        int[] testY = {-1,1};
+
+        for(int x : testY) {
+            for(int y : testX) {
+                // Sets in what direction what team can move
+                if(round  && y == 1)  continue;
+                if(!round && y == -1) continue;
+
+                Pawn p = getPawn(tileX + x, tileY + y);
+                if(p == null) {
+                    pawnLegalMoves.add(new Point2D(tileX + x, tileY + y));
+                }
+
+                /*else {
+                    p = getPawn(tileX + x + x, tileY + y + y);
+                    if(p == null) {
+                        pawnLegalMoves.addAll(getLegalMoves(tileX + x + x,tileY + y + y));
+                        pawnLegalMoves.add(new Point2D(tileX + x + x,tileY + y + y));
+                    }
+                }*/
+            }
+        }
+
+        return pawnLegalMoves;
+    }
+
+    private List<Point2D> getLegalMoves(Pawn pawn) {
+        Point2D pos = pawn.getPosition();
+        return getLegalMoves((int) pos.getX(), (int) pos.getY());
     }
 
     /**
@@ -142,4 +182,5 @@ public class Game {
             focusedPawn = pawn;
         }
     }
+
 }

@@ -58,7 +58,14 @@ public class Pawn implements Drawable {
         return this.x == x && this.y == y;
     }
 
+    public Point2D getPosition() {
+        return new Point2D(x,y);
+    }
 
+    public void setPosition(Point2D position) {
+        this.x = (int) position.getX();
+        this.y = (int) position.getY();
+    }
 
     public void setFocused(boolean focused) {
         this.focused = focused;
@@ -66,4 +73,11 @@ public class Pawn implements Drawable {
     public boolean isFocused() {
         return focused;
     }
+
+    public boolean isTeam() {
+        return team;
+    }
+
+
+
 }
