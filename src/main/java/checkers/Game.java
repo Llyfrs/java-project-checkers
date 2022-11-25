@@ -18,7 +18,7 @@ public class Game {
     private List<Drawable> drawable;
     private List<Point2D> legalMoves;
     private Board board;
-    private Pawn[] pawns;
+    private List<Pawn> pawns;
 
 
 
@@ -35,18 +35,17 @@ public class Game {
         drawable = new ArrayList<Drawable>();
         legalMoves = new ArrayList<Point2D>();
 
-
         // White starts (gets to play the first round)
         this.round = true;
 
         // Board must be first in the list to be rendered behind pawns
         drawable.add(board);
 
-        pawns = new Pawn[24];
-
+        pawns = new ArrayList<Pawn>();
 
         Image blackPawnImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("PawnBlack.png" )));
         Image whitePawnImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("PawnWhite.png")));
+        Image crown          = new Image(Objects.requireNonNull(getClass().getResourceAsStream("Crown.png")));
 
         for(int i = 0 ; i < 2; i++) {
 
@@ -57,19 +56,18 @@ public class Game {
                 Pawn pawn;
 
                 if(i == 0) {
-                    pawn = new Pawn(x,y,false,canvas,blackPawnImage);
+                    pawn = new Pawn(x,y,false,canvas,blackPawnImage, crown);
                 } else {
-                    pawn = new Pawn(x,y,true,canvas,whitePawnImage);
+                    pawn = new Pawn(x,y,true,canvas,whitePawnImage,  crown);
                 }
 
-                pawns[i*12 + j] = pawn;
+                pawns.add(pawn);
                 drawable.add(pawn);
 
             }
         }
 
         focusedPawn = (Pawn) drawable.get(1);
-
     }
 
     /**
@@ -90,15 +88,35 @@ public class Game {
 
         // If clicked on one of the available legal moves, the focus pawn in moved on chosen tile.
         if(legalMoves.contains(new Point2D(x,y))) {
-            System.out.print("Legal Move Chosen");
+            System.out.print("Legal Move Chosen\n");
+
+            // If the chosen location is further away that 2 tiles, it means it's attacking move and
+            // enemy pawn needs to be removed from the table.
+            Point2D focusedPosition = focusedPawn.getPosition();
+            if(focusedPosition.distance(x,y) > 2) {
+                int removeX = (int)(x + focusedPosition.getX()) / 2;
+                int removeY = (int)(y + focusedPosition.getY()) / 2;
+
+                System.out.printf("Removing [%d,%d]\n",removeX,removeY);
+
+                removePawn(removeX,removeY);
+
+                round = !round;
+            }
+
             focusedPawn.setPosition(new Point2D(x,y));
             focusedPawn.setFocused(false);
             legalMoves.clear();
             round = !round;
+
+            // If pawn gets to the end of a board they get turned in to a queen and can now move in all directions.
+            if(focusedPawn.getPosition().getY() == 7 * (focusedPawn.isTeam() ? 0:1)) {
+                focusedPawn.setQueen(true);
+            }
+
         };
 
         draw();
-
     }
 
     /**
@@ -124,21 +142,24 @@ public class Game {
         for(int x : testY) {
             for(int y : testX) {
                 // Sets in what direction what team can move
-                if(round  && y == 1)  continue;
-                if(!round && y == -1) continue;
+
+                if(!focusedPawn.isQueen()) {
+                    if( round && y ==  1)  continue;
+                    if(!round && y == -1)  continue;
+                }
+
 
                 Pawn p = getPawn(tileX + x, tileY + y);
                 if(p == null) {
                     pawnLegalMoves.add(new Point2D(tileX + x, tileY + y));
                 }
 
-                /*else {
+                else if(p.isTeam() != round){
                     p = getPawn(tileX + x + x, tileY + y + y);
                     if(p == null) {
-                        pawnLegalMoves.addAll(getLegalMoves(tileX + x + x,tileY + y + y));
                         pawnLegalMoves.add(new Point2D(tileX + x + x,tileY + y + y));
                     }
-                }*/
+                }
             }
         }
 
@@ -164,6 +185,13 @@ public class Game {
         }
 
         return null; // Returns null if no pawn is found indicating the tile is empty.
+    }
+
+    private void removePawn(int x, int y) {
+        Pawn p = getPawn(x,y);
+
+        pawns.remove(p);
+        drawable.remove(p);
     }
 
     /**

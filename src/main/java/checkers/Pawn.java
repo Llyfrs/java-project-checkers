@@ -11,8 +11,12 @@ public class Pawn implements Drawable {
 
     private final Canvas canvas;
     private final Image image;
+    private final Image crown;
 
     private boolean team;
+
+
+    private boolean queen;
     private boolean focused;
     private int x;
     private int y;
@@ -22,13 +26,15 @@ public class Pawn implements Drawable {
     private final double tileHeight;
 
 
-    public Pawn(int x, int y, boolean team,Canvas canvas, Image image) {
+    public Pawn(int x, int y, boolean team,Canvas canvas, Image image, Image crown) {
         this.canvas = canvas;
         this.image = image;
+        this.crown = crown;
         this.x = x;
         this.y = y;
 
         this.team = team;
+        this.queen = false;
 
         this.tileHeight = canvas.getHeight() / 8;
         this.tileWidth  = canvas.getWidth()  / 8;
@@ -40,6 +46,10 @@ public class Pawn implements Drawable {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.drawImage(this.image,x * tileWidth,y * tileHeight ,tileWidth,tileHeight);
+
+        if(queen) {
+            gc.drawImage(this.crown,x * tileWidth,y * tileHeight ,tileWidth,tileHeight);
+        }
 
         if(focused) {
             gc.save();
@@ -78,6 +88,12 @@ public class Pawn implements Drawable {
         return team;
     }
 
+    public boolean isQueen() {
+        return queen;
+    }
 
+    public void setQueen(boolean queen) {
+        this.queen = queen;
+    }
 
 }
