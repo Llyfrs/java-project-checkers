@@ -40,6 +40,12 @@ public class MainMenuController {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
 			Parent root = loader.load();
 
+			GameBoardController controller = loader.getController();
+
+			controller.setStage(stage);
+			controller.setPreviousScene(stage.getScene());
+
+
 			Scene scene = new Scene(root);
 
 			this.stage.setScene(scene);

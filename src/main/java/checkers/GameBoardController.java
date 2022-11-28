@@ -1,15 +1,21 @@
 package checkers;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 
 public class GameBoardController {
     @FXML
     private Canvas canvas;
 
-    Game game;
+    private Game game;
+
+    private Scene previousScene;
+    private Stage stage;
+
 
     //TODO Connect NewGame button
     //TODO Connect Main Menu button
@@ -30,4 +36,24 @@ public class GameBoardController {
         game.click(x,y);
 
     }
+
+    @FXML
+    private void newGamePressed() {
+        this.initialize();
+    }
+
+    @FXML
+    private void mainMenuPressed() {
+        this.stage.setScene(previousScene);
+    }
+
+
+    public void setPreviousScene(Scene scene) {
+        this.previousScene = scene;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
 }
