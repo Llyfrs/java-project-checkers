@@ -126,12 +126,19 @@ public class Game {
         for(Drawable obj : drawable) {
             obj.draw();
         }
-
+        // Highlights tiles in legal moves
         for(Point2D cord : legalMoves) {
             board.highlight((int)cord.getX(),(int)cord.getY());
         }
     }
 
+    /**
+     * Generates legal moves for a tile at specified coordinates, the direction is decided by
+     * whose round it currently is.
+     * @param tileX Colum of tile
+     * @param tileY Row of a tile
+     * @return Returns list of legalMoves
+     */
     private List<Point2D> getLegalMoves(int tileX, int tileY) {
 
         List<Point2D> pawnLegalMoves = new ArrayList<Point2D>();
@@ -195,7 +202,7 @@ public class Game {
     }
 
     /**
-     *
+     * Switches focus to a chosen pawn, or turns it off, if the current pawn is already focused.
      * @param pawn Pawn that we want to switch focus to.
      */
     private void switchFocus(Pawn pawn) {

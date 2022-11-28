@@ -25,10 +25,6 @@ public class MainMenuController {
 		continueButton.setVisible(false);
 	}
 
-	public MainMenuController() {
-
-	}
-
 	@FXML
 	public void continueButtonPressed(){
 		//TODO Make continues button to load saved game
@@ -37,17 +33,17 @@ public class MainMenuController {
 	@FXML
 	public void startButtonPressed() {
 		try {
+			// Load game board and make loader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
 			Parent root = loader.load();
 
+			// Get game board controller and set its variables it needs to work
 			GameBoardController controller = loader.getController();
-
 			controller.setStage(stage);
 			controller.setPreviousScene(stage.getScene());
 
-
+			// Create scene and switch to it
 			Scene scene = new Scene(root);
-
 			this.stage.setScene(scene);
 
 		} catch (IOException e) {
@@ -56,13 +52,19 @@ public class MainMenuController {
 	}
 
 
+
+	/**
+	 * Closes the program, activated when the closeButton is pressed
+	 */
 	@FXML
 	public void exitButtonPressed() {
 		this.stage.close();
 	}
 
-
-
+	/**
+	 * Sets Stage
+	 * @param stage - Stage that will is to be used to display GameBoard after New Game or Continue is pressed
+	 */
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
