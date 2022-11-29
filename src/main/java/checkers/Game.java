@@ -101,9 +101,7 @@ public class Game {
                 removePawn(removeX,removeY);
 
                 List<Point2D> attackMoves = new ArrayList<Point2D>() ;
-                System.out.printf("Getting legal move for [%d,%d]",x,y);
-                List<Point2D> tempMoves = getLegalMoves(x,y);
-                for(Point2D move : tempMoves) {
+                for(Point2D move : getLegalMoves(x,y)) {
                     if (move.distance(x,y) > 2) {
                         attackMoves.add(move);
                     }
