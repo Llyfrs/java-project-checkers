@@ -21,7 +21,7 @@ public class Game {
 
 
     private Pawn focusedPawn;
-    private boolean forcedFocuse;
+    private boolean forcedFocus;
 
     private Canvas canvas;
 
@@ -74,12 +74,19 @@ public class Game {
      * @param x Colum of tile that is to be clicked on
      * @param y Row of tile that is to be clicked on
      */
+
+
+    /**
+     * Processes click on the board, the entire game is controlled by this single function.
+     * @param x colum of tile clicked
+     * @param y row of tile clicked
+     */
     public void click(int x, int y) {
 
         Pawn pawn = getPawn(x,y);
 
         //Puts clicked pawn in to focus mode and generates legal moves for it.
-        if(pawn != null && !forcedFocuse &&pawn.isTeam() == round) {
+        if(pawn != null && !forcedFocus &&pawn.isTeam() == round) {
             switchFocus(pawn);
             legalMoves.clear();
             legalMoves.addAll(getLegalMoves(focusedPawn));
@@ -93,6 +100,7 @@ public class Game {
             // enemy pawn needs to be removed from the table.
             Point2D focusedPosition = focusedPawn.getPosition();
             if(focusedPosition.distance(x,y) > 2) {
+                // Calculates the position of pawn to be removed
                 int removeX = (int)(x + focusedPosition.getX()) / 2;
                 int removeY = (int)(y + focusedPosition.getY()) / 2;
 
@@ -100,6 +108,7 @@ public class Game {
 
                 removePawn(removeX,removeY);
 
+                // Finds if chain attack in possible
                 List<Point2D> attackMoves = new ArrayList<Point2D>() ;
                 for(Point2D move : getLegalMoves(x,y)) {
                     if (move.distance(x,y) > 2) {
@@ -107,17 +116,22 @@ public class Game {
                     }
                 }
 
+                // If it is, it forces focus on the attacking pawn and doesn't switch round, making the player
+                // do the chain kill
                 if(!attackMoves.isEmpty()) {
-                    forcedFocuse = true;
+                    forcedFocus = true;
                     legalMoves = attackMoves;
-                } else {
-                    forcedFocuse = false;
+                } // If not, sets the forced focus to false (just in case its on true)
+                else {
+                    forcedFocus = false;
                 }
             }
 
+            // Moves pawn to the new position
             focusedPawn.setPosition(new Point2D(x,y));
 
-            if(!forcedFocuse) {
+            // If forced focus isn't on switch round, clear legal moves and de-focus current pawn.
+            if(!forcedFocus) {
                 focusedPawn.setFocused(false);
                 legalMoves.clear();
                 round = !round;
@@ -131,6 +145,7 @@ public class Game {
 
         };
 
+        // Draws the whole board, wit hall the changes implemented.
         draw();
     }
 
@@ -158,27 +173,29 @@ public class Game {
 
         List<Point2D> pawnLegalMoves = new ArrayList<Point2D>();
 
+        // Area to check for legal moves, diagonally in all directions.
         int[] testX = {-1,1};
         int[] testY = {-1,1};
 
         for(int x : testY) {
             for(int y : testX) {
-                // Sets in what direction what team can move
 
+                // Sets in what direction what team can move
+                // If the pawn is queen it can move in both directions so this can be ignored.
                 if(!focusedPawn.isQueen()) {
                     if( round && y ==  1)  continue;
                     if(!round && y == -1)  continue;
                 }
 
-
+                // If the check tile doesn't have a pawn, you can move there
                 Pawn p = getPawn(tileX + x, tileY + y);
-                if(p == null) {
+                if(isTileEmpty(tileX + x, tileY + y)) {
                     pawnLegalMoves.add(new Point2D(tileX + x, tileY + y));
                 }
 
+                // If the tile has a pawn but the next on that diagonal is empty, you can jump over it and defeat it
                 else if(p.isTeam() != round){
-                    p = getPawn(tileX + x + x, tileY + y + y);
-                    if(p == null) {
+                    if(isTileEmpty(tileX + 2*x,tileY + 2*y)) {
                         pawnLegalMoves.add(new Point2D(tileX + x + x,tileY + y + y));
                     }
                 }
@@ -188,23 +205,24 @@ public class Game {
         return pawnLegalMoves;
     }
 
+    /**
+     * Gets legal moves for a specific pawn.
+     * @param pawn Pawn that we want to know the legal moves for
+     * @return Returns all legal moves for that pawn (ignores team works with round variable)
+     */
     private List<Point2D> getLegalMoves(Pawn pawn) {
         Point2D pos = pawn.getPosition();
         return getLegalMoves((int) pos.getX(), (int) pos.getY());
     }
 
     /**
-     *  Gets pawn at specified position
+     *  Gets pawn at specified position. Should not be used to check if tile is empty, use isTileEmpty for that because
+     *  coordinates outside the board will also return null
      * @param x X position
      * @param y Y position
      * @return Returns pawn on that position or null if no pawn is found
      */
     private Pawn getPawn(int x , int y) {
-
-        if(x > 7 || x < 0 || y > 7 || y < 0) {
-            return pawns.get(0);
-        }
-
         for(Pawn pawn : pawns) {
             if(pawn.isAtPosition(x,y)) {
                 return pawn;
@@ -212,6 +230,21 @@ public class Game {
         }
 
         return null; // Returns null if no pawn is found indicating the tile is empty.
+    }
+
+    /**
+     * Tells you if the title on inputted coordinates is empty.
+     * @param x Column of tile that is to be checked
+     * @param y Row of tile that is to be checked
+     * @return returns true if the tile is empty and false if it isn't or if inputted coordinates are outside the board
+     */
+    private boolean isTileEmpty(int x, int y) {
+        if(x > 7 || x < 0 || y > 7 || y < 0) {
+            return false;
+        }
+
+        Pawn pawn = getPawn(x,y);
+        return pawn == null;
     }
 
     private void removePawn(int x, int y) {
