@@ -13,7 +13,7 @@ public class Pawn implements Drawable {
     private final Image image;
     private final Image crown;
 
-    private boolean team;
+    private final boolean team;
 
 
     private boolean queen;
