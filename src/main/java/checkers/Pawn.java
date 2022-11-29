@@ -41,6 +41,8 @@ public class Pawn implements Drawable {
 
     }
 
+
+
     @Override
     public void draw() {
         GraphicsContext gc = canvas.getGraphicsContext2D();

@@ -10,9 +10,7 @@ import java.util.Objects;
 
 
 /*TODO
-    - Highlight all legal moves for the person who's round it is
-    - When pawn selected highlight only moves for it.
-    - When player chooses one of legal moves, move pawn
+    - Highlight all legal moves for the person who's round it is (Probably won't be doint this one)
  */
 public class Game {
     private List<Drawable> drawable;
@@ -23,6 +21,7 @@ public class Game {
 
 
     private Pawn focusedPawn;
+    private boolean forcedFocuse;
 
     private Canvas canvas;
 
@@ -80,7 +79,7 @@ public class Game {
         Pawn pawn = getPawn(x,y);
 
         //Puts clicked pawn in to focus mode and generates legal moves for it.
-        if(pawn != null && pawn.isTeam() == round) {
+        if(pawn != null && !forcedFocuse &&pawn.isTeam() == round) {
             switchFocus(pawn);
             legalMoves.clear();
             legalMoves.addAll(getLegalMoves(focusedPawn));
@@ -101,13 +100,31 @@ public class Game {
 
                 removePawn(removeX,removeY);
 
-                round = !round;
+                List<Point2D> attackMoves = new ArrayList<Point2D>() ;
+                System.out.printf("Getting legal move for [%d,%d]",x,y);
+                List<Point2D> tempMoves = getLegalMoves(x,y);
+                for(Point2D move : tempMoves) {
+                    if (move.distance(x,y) > 2) {
+                        attackMoves.add(move);
+                    }
+                }
+
+                if(!attackMoves.isEmpty()) {
+                    forcedFocuse = true;
+                    legalMoves = attackMoves;
+                } else {
+                    forcedFocuse = false;
+                }
             }
 
             focusedPawn.setPosition(new Point2D(x,y));
-            focusedPawn.setFocused(false);
-            legalMoves.clear();
-            round = !round;
+
+            if(!forcedFocuse) {
+                focusedPawn.setFocused(false);
+                legalMoves.clear();
+                round = !round;
+            }
+
 
             // If pawn gets to the end of a board they get turned in to a queen and can now move in all directions.
             if(focusedPawn.getPosition().getY() == 7 * (focusedPawn.isTeam() ? 0:1)) {
@@ -185,6 +202,11 @@ public class Game {
      * @return Returns pawn on that position or null if no pawn is found
      */
     private Pawn getPawn(int x , int y) {
+
+        if(x > 7 || x < 0 || y > 7 || y < 0) {
+            return pawns.get(0);
+        }
+
         for(Pawn pawn : pawns) {
             if(pawn.isAtPosition(x,y)) {
                 return pawn;
