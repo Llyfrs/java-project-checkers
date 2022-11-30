@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
@@ -16,13 +17,19 @@ public class GameBoardController {
     private Scene previousScene;
     private Stage stage;
 
+    @FXML
+    private Text whiteScoreText;
+    @FXML
+    private Text blackScoreText;
+
 
     //TODO Connect NewGame button
     //TODO Connect Main Menu button
 
     @FXML
     private void initialize() {
-        game = new Game(canvas);
+        Score score = new Score(whiteScoreText,blackScoreText);
+        game = new Game(canvas,score);
         game.draw();
     }
 

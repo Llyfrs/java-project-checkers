@@ -10,7 +10,9 @@ import java.util.Objects;
 
 
 /*TODO
-    - Highlight all legal moves for the person who's round it is (Probably won't be doint this one)
+    - If no moves are available end game..
+    - If no pawns are left end game
+    - Count score
  */
 public class Game {
     private List<Drawable> drawable;
@@ -18,7 +20,7 @@ public class Game {
     private Board board;
     private List<Pawn> pawns;
 
-
+    private Score score;
 
     private Pawn focusedPawn;
     private boolean forcedFocus;
@@ -29,16 +31,20 @@ public class Game {
     // False - It's black players round
     private boolean round;
 
-    public Game(Canvas canvas) {
+
+    public Game(Canvas canvas, Score score) {
         board = new Board(canvas);
         drawable = new ArrayList<Drawable>();
         legalMoves = new ArrayList<Point2D>();
+
+        this.score = score;
 
         // White starts (gets to play the first round)
         this.round = true;
 
         // Board must be first in the list to be rendered behind pawns
         drawable.add(board);
+        drawable.add(this.score);
 
         pawns = new ArrayList<Pawn>();
 
@@ -66,7 +72,7 @@ public class Game {
             }
         }
 
-        focusedPawn = (Pawn) drawable.get(1);
+        focusedPawn = pawns.get(0);
     }
 
     /**
@@ -77,7 +83,7 @@ public class Game {
 
 
     /**
-     * Processes click on the board, the entire game is controlled by this single function.
+     * Processes click on the board, the entire game is controlled by this function.
      * @param x colum of tile clicked
      * @param y row of tile clicked
      */
@@ -86,7 +92,7 @@ public class Game {
         Pawn pawn = getPawn(x,y);
 
         //Puts clicked pawn in to focus mode and generates legal moves for it.
-        if(pawn != null && !forcedFocus &&pawn.isTeam() == round) {
+        if(pawn != null && !forcedFocus && pawn.isTeam() == round) {
             switchFocus(pawn);
             legalMoves.clear();
             legalMoves.addAll(getLegalMoves(focusedPawn));
@@ -106,6 +112,7 @@ public class Game {
 
                 System.out.printf("Removing [%d,%d]\n",removeX,removeY);
 
+                score.increase(round);
                 removePawn(removeX,removeY);
 
                 // Finds if chain attack in possible
@@ -194,9 +201,11 @@ public class Game {
                 }
 
                 // If the tile has a pawn but the next on that diagonal is empty, you can jump over it and defeat it
-                else if(p.isTeam() != round){
-                    if(isTileEmpty(tileX + 2*x,tileY + 2*y)) {
-                        pawnLegalMoves.add(new Point2D(tileX + x + x,tileY + y + y));
+                else {
+                    if(p != null && p.isTeam() != round) {
+                        if(isTileEmpty(tileX + 2*x,tileY + 2*y)) {
+                            pawnLegalMoves.add(new Point2D(tileX + x + x,tileY + y + y));
+                        }
                     }
                 }
             }

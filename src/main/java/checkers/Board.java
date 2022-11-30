@@ -50,7 +50,6 @@ public class Board implements Drawable {
      */
     public void highlight(int x, int y) {
 
-        //TODO - Decide if the input should be checked;
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.save();
 
