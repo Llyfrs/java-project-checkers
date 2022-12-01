@@ -12,7 +12,6 @@ import java.util.Objects;
 /*TODO
     - If no moves are available end game..
     - If no pawns are left end game
-    - Count score
  */
 public class Game {
     private List<Drawable> drawable;
@@ -79,13 +78,6 @@ public class Game {
      * Performs click on the game board and reacts accordingly
      * @param x Colum of tile that is to be clicked on
      * @param y Row of tile that is to be clicked on
-     */
-
-
-    /**
-     * Processes click on the board, the entire game is controlled by this function.
-     * @param x colum of tile clicked
-     * @param y row of tile clicked
      */
     public void click(int x, int y) {
 
