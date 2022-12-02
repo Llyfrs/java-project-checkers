@@ -6,15 +6,17 @@ public class Score implements Drawable{
     private final Text whiteScoreText;
     private final Text blackScoreText;
 
+
+
     private int whiteScore;
     private int blackScore;
 
-    public Score(Text white, Text black) {
+    public Score(Text white, Text black, int whiteScore, int blackScore) {
         whiteScoreText = white;
         blackScoreText = black;
 
-        whiteScore = 0;
-        blackScore = 0;
+        this.whiteScore = whiteScore;
+        this.blackScore = blackScore;
     }
 
     @Override
@@ -29,5 +31,13 @@ public class Score implements Drawable{
         } else {
             blackScore++;
         }
+    }
+
+    public int getWhiteScore() {
+        return whiteScore;
+    }
+
+    public int getBlackScore() {
+        return blackScore;
     }
 }

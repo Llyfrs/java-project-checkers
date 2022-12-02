@@ -21,17 +21,22 @@ public class MainMenuController {
 
 	@FXML
 	private void initialize() {
-		//TODO Show continue button if save file is found
-		continueButton.setVisible(false);
+		SaveManager saveManager = new SaveManager();
+		if(!saveManager.saveExists()) {
+			continueButton.setVisible(false);
+		}
+
 	}
 
 	@FXML
 	public void continueButtonPressed(){
-		//TODO Make continues button to load saved game
+			// Starts the game as usual but then in also makes the controller load game from the save file
+			GameBoardController controller = this.startButtonPressed();
+			controller.loadLastGame();
 	}
 
 	@FXML
-	public void startButtonPressed() {
+	public GameBoardController startButtonPressed() {
 		try {
 			// Load game board and make loader
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameBoard.fxml"));
@@ -46,9 +51,13 @@ public class MainMenuController {
 			Scene scene = new Scene(root);
 			this.stage.setScene(scene);
 
+			return controller;
+
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+
+
 	}
 
 

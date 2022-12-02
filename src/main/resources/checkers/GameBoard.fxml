@@ -32,15 +32,12 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
 <VBox prefHeight="601.0" prefWidth="718.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="checkers.GameBoardController">
   <children>
@@ -55,26 +52,31 @@
             <Canvas fx:id="canvas" height="504.0" layoutX="34.0" layoutY="28.0" onMousePressed="#onMouseClicked" width="504.0" />
             <Button layoutX="482.0" layoutY="545.0" mnemonicParsing="false" onAction="#newGamePressed" prefHeight="42.0" prefWidth="91.0" text="New Game" />
             <Button layoutX="582.0" layoutY="545.0" mnemonicParsing="false" onAction="#mainMenuPressed" prefHeight="42.0" prefWidth="91.0" text="Main Menu" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fccf98" height="102.0" layoutX="568.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="102.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fccf98" height="102.0" layoutX="568.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="102.0" />
-            <Text layoutX="582.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="White">
+            <Rectangle fx:id="whiteRectangle" arcHeight="5.0" arcWidth="5.0" fill="#aec311" height="102.0" layoutX="568.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="102.0" />
+            <Rectangle fx:id="blackRectangle" arcHeight="5.0" arcWidth="5.0" fill="#fccf98" height="102.0" layoutX="560.0" layoutY="42.0" stroke="BLACK" strokeType="INSIDE" width="102.0" />
+            <Text layoutX="582.0" layoutY="440.0" strokeType="OUTSIDE" strokeWidth="0.0" text="White">
                <font>
                   <Font size="27.0" />
                </font>
             </Text>
-            <Text layoutX="585.0" layoutY="443.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Black">
+            <Text layoutX="577.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Black">
                <font>
                   <Font size="27.0" />
                </font>
             </Text>
-            <Text fx:id="blackScoreText" layoutX="611.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <Text fx:id="blackScoreText" layoutX="603.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
                   <Font size="27.0" />
                </font>
             </Text>
-            <Text fx:id="whiteScoreText" layoutX="611.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+            <Text fx:id="whiteScoreText" layoutX="611.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
                   <Font size="27.0" />
+               </font>
+            </Text>
+            <Text fx:id="gameOverText" layoutX="30.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Over" textAlignment="CENTER" visible="false" wrappingWidth="512.0">
+               <font>
+                  <Font size="46.0" />
                </font>
             </Text>
          </children>

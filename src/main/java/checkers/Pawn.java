@@ -26,7 +26,7 @@ public class Pawn implements Drawable {
     private final double tileHeight;
 
 
-    public Pawn(int x, int y, boolean team,Canvas canvas, Image image, Image crown) {
+    public Pawn(int x, int y, boolean team,boolean queen,Canvas canvas, Image image, Image crown) {
         this.canvas = canvas;
         this.image = image;
         this.crown = crown;
@@ -34,7 +34,7 @@ public class Pawn implements Drawable {
         this.y = y;
 
         this.team = team;
-        this.queen = false;
+        this.queen = queen;
 
         this.tileHeight = canvas.getHeight() / 8;
         this.tileWidth  = canvas.getWidth()  / 8;

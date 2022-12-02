@@ -2,6 +2,7 @@ package checkers;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
@@ -24,17 +25,20 @@ public class Game {
     private Pawn focusedPawn;
     private boolean forcedFocus;
 
-    private Canvas canvas;
+    private final Canvas canvas;
 
     // True  - It's white players round
     // False - It's black players round
     private boolean round;
 
+    private boolean gameOver;
 
     public Game(Canvas canvas, Score score) {
         board = new Board(canvas);
         drawable = new ArrayList<Drawable>();
         legalMoves = new ArrayList<Point2D>();
+
+        this.canvas = canvas;
 
         this.score = score;
 
@@ -42,8 +46,6 @@ public class Game {
         this.round = true;
 
         // Board must be first in the list to be rendered behind pawns
-        drawable.add(board);
-        drawable.add(this.score);
 
         pawns = new ArrayList<Pawn>();
 
@@ -60,18 +62,19 @@ public class Game {
                 Pawn pawn;
 
                 if(i == 0) {
-                    pawn = new Pawn(x,y,false,canvas,blackPawnImage, crown);
+                    pawn = new Pawn(x,y,false,false,canvas,blackPawnImage, crown);
                 } else {
-                    pawn = new Pawn(x,y,true,canvas,whitePawnImage,  crown);
+                    pawn = new Pawn(x,y,true,false,canvas,whitePawnImage,  crown);
                 }
 
                 pawns.add(pawn);
-                drawable.add(pawn);
 
             }
         }
 
         focusedPawn = pawns.get(0);
+        //Puts all drawable objects in to the drawable list.
+        updateDrawables();
     }
 
     /**
@@ -144,6 +147,12 @@ public class Game {
 
         };
 
+        if(!isThereMoveAvailable() ) {
+            gameOver(!round);
+        }else if(score.getBlackScore() == 12 || score.getWhiteScore() == 12) {
+            gameOver(score.getWhiteScore() == 12);
+        };
+
         // Draws the whole board, wit hall the changes implemented.
         draw();
     }
@@ -204,6 +213,17 @@ public class Game {
         }
 
         return pawnLegalMoves;
+    }
+
+    public boolean isThereMoveAvailable() {
+        ArrayList<Point2D> temp = new ArrayList<Point2D>();
+        for(Pawn pawn : pawns){
+            if(pawn.isTeam() == round) {
+                temp.addAll(getLegalMoves(pawn));
+            }
+
+        }
+        return !temp.isEmpty();
     }
 
     /**
@@ -272,4 +292,49 @@ public class Game {
         }
     }
 
+    private void gameOver(boolean team) {
+        drawable.clear(); // disables any player interaction (it won't render)
+        gameOver = true;
+        round = team;
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public List<Pawn> getPawns() {
+        return pawns;
+    }
+
+    public void setPawns(List<Pawn> pawns) {
+        this.pawns = pawns;
+    }
+
+    public void updateDrawables() {
+        drawable.clear();
+        drawable.add(board);
+        drawable.add(score);
+        drawable.addAll(pawns);
+        draw();
+    }
+
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+    public boolean isRound() {
+        return round;
+    }
+    public void setRound(boolean round) {
+        this.round = round;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
 }
+
