@@ -9,5 +9,8 @@
         <module name="java-project-checkers" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Drawable" target="19" />
+    </bytecodeTargetLevel>
   </component>
 </project>

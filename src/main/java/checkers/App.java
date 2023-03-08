@@ -19,7 +19,6 @@ public class App extends Application {
 				try {
 					
 
-	    		
 				FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("MainMenu.fxml")));
 
 				Parent root = loader.load();
