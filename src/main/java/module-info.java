@@ -1,4 +1,4 @@
-module java-project-checkers {
+module checkers {
 	  requires transitive javafx.controls;
 	  requires javafx.fxml;
 		opens checkers to javafx.fxml;
