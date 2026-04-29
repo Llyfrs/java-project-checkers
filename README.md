@@ -16,6 +16,6 @@ mvn javafx:run
 ## Screenshots
 
 <p align="center">
-  <img width="49%" alt="Main menu" src="https://github.com/user-attachments/assets/afffc258-df9f-463c-8438-2e042f9c83bc" />
-  <img width="49%" alt="Game board" src="https://github.com/user-attachments/assets/8a552b39-6d28-4280-96c9-4ea877ba74fb" />
+  <img width="49%" alt="Main menu" src="https://github.com/user-attachments/assets/f3c96a60-b04a-46ad-9352-27e2a1d39a64" />
+  <img width="49%" alt="Game board" src="https://github.com/user-attachments/assets/fa89475a-e1ba-42c5-8241-8714d7d63fdf" />
 </p>
